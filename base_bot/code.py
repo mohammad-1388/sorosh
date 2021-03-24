@@ -3,16 +3,15 @@ from os import chdir
 from defs import defs
 from client import Client
 import rooms
-from random import *
 from collections import OrderedDict
 import values
 
-bot_token = 'VbZL86Jvevq4eDF2NF8QkuY8lumzs05XNPKyRBFKw4uNpAawjOEl8KClwNoBytx8GNF0QZPzNQ8lvFVFNGDD8VuAZ4yqyJgGAAgSpVFkxymoERCRjjE8oJnkmIdKhemSYnqE_4RSy4rI0HjQ'
-my_user = 'lbPaUy7i3eV9N9MQc15gEul_34Nas6ye0wRqIYPT3-U1fRCiFtEwvqK9ouA'
+bot_token = values.bot_token()
+my_user = values.me_token()
 my_bot = defs(bot_token)
 
-keyboard_game_init = [ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'} , {'text' : 'چت خصوصی' , 'command' : '//privet_chat'}] , 
-                       [{'text' : 'جادو ها'   , 'command' : '//magics'   } , {'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
+keyboard_game_init = [ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'} , {'text' : 'جادو ها'   , 'command' : '//magics'   } ] , 
+                       [{'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
 
 def game_loop (user_id):
     karakters = [
@@ -46,7 +45,9 @@ def game_loop (user_id):
             countertmp += 1
 
     # خود بازی
+    my_bot.change_keyboard(my_user , keyboard_game_init)
     for message in my_bot.get_message():
+        my_bot.change_keyboard(my_user , keyboard_game_init)
         print (message)
         if message['type'] == 'TEXT':
             if message['body'][0:2] == '//':
@@ -56,8 +57,6 @@ def game_loop (user_id):
                         my_bot.send_message(user_id , 'باموقیت از سرور خارج شدید')
                         my_bot.send_group(server_loc , 'سیستم' , 'کاربر %s از بازی خارج شد' % user_id)
                         break
-                if vorodi == '//reset_rank':
-                    my_bot.privet_chat_game(user_id)
                 if vorodi == '//magics':
                     my_bot.magics_game(user_id)
                 if vorodi == '//daraiy_ha':
@@ -66,9 +65,6 @@ def game_loop (user_id):
                 # اجرا کردن دستور کیبورد
             else:
                 my_bot.send_group(server_loc , 'test' , message['body'])
-                my_bot.change_keyboard(user_id , keyboard_game_init)
-
-
 
 
 

@@ -1,7 +1,12 @@
-import mysql.connector
+from mysql.connector import connect
 from os import chdir
 from client import Client
 import values
+SQL = connect(
+    user='me',
+    password='nohack',
+    database='mybot'
+)
 
 class defs:
     def __init__ (self , bot_token):
@@ -70,5 +75,21 @@ class defs:
                 self.send_group(loc , user_id , message['body'])
 
     def reset_rank (self , user_id):
-        pass
+        tmp_message = 'ایا مطمعن به پاک کردن تمام اطلاعات خود شامل امتیاز , نام و  id شما در ربات هستید؟'
+        tmp_keyboard = [[{'text' : 'بله' , 'command' : '//yes_reset_rank'} , {'text' : 'نه' , 'command' : '//no_reset_rank'}]]
+        self.send_message(user_id , tmp_message , tmp_keyboard)
+        cursor = SQL.cursor()
+        for message in self.get_message():
+            print (message)
+            if message['body'][0:2] == '//':
+                if message['body'] == '//yes_reset_rank':
+                    cursor.execute('DELETE FROM Users WHERE ID="%s"' % user_id)
+                    SQL.commit()
+                    self.send_message(user_id , 'اطلاعات شما با موفقیت پاک شد')
+                    break
+                if message['body'] == '//no_reset_rank':
+                    self.send_message(user_id , 'باشه')
+                    break
+            else:
+                self.send_message(user_id , 'جوون؟ :/')
 
