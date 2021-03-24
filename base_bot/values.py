@@ -1,5 +1,5 @@
 def bot_token ():
-    return 'VbZL86Jvevq4eDF2NF8QkuY8lumzs05XNPKyRBFKw4uNpAawjOEl8KClwNoBytx8GNF0QZPzNQ8lvFVFNGDD8VuAZ4yqyJgGAAgSpVFkxymoERCRjjE8oJnkmIdKhemSYnqE_4RSy4rI0HjQ'
+    return 'EW4Ym48lRJUqm7v4gGmapwJs7GSztlNCRprRc83izDSBgUTa6AlrZoM9VoIe3loVAFRMkA7HDkSyBWeCNzUkxNAFmPbI5j8tu6drR2k-NX_NpKFfw-bozOd3JB3MeH878acwf8mzEAdkXHIG'
 
 def me_token ():
     return 'lbPaUy7i3eV9N9MQc15gEul_34Nas6ye0wRqIYPT3-U1fRCiFtEwvqK9ouA'
