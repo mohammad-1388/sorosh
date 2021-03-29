@@ -2,12 +2,12 @@ from mysql.connector import connect
 from os import chdir
 from client import Client
 import values
-SQL = values.sql_connect()
 
 class defs:
     def __init__ (self , bot_token):
         self.bot_token = bot_token
         self.client = Client(bot_token)
+        SQL = values.sql_connect()
 
     def get_message (self):
         messages = self.client.get_messages()

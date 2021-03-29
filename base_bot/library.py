@@ -16,7 +16,8 @@ def create_user(user_id):
                 cursor.execute('INSERT INTO Users (ID  , Name) VALUES ("%s" , "%s")' % (user_id , name_karbar))
                 bot.send_message(user_id , 'حالا دیگه عضو بازی شدی می تونی وارد بازی بشی و بقیه رو دعوت کنی تا سکه بگیری \n راستی ۲۰ تا سکه هم برای عضو شدنت به حسابت اضافه شد')
                 SQL.commit()
-                return cursor.execute('SELECT * FROM Users WHERE ID=%s' % (user_id))
+                cursor.execute('SELECT * FROM Users WHERE ID="%s"' % (user_id))
+                return cursor.fetchall()[0]
 
             name_karbar = message['body']
             tmp_message = 'اسم شما %s هست دیگه نه؟' % name_karbar

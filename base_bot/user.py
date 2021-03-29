@@ -3,14 +3,13 @@ from defs import defs
 import values
 from library import create_user
 
-SQL = values.sql_connect()
-cursor = SQL.cursor()
-
 class user:
     def __init__ (self , user_id):
+        SQL = values.sql_connect()
         cursor = SQL.cursor()
-        cursor = cursor.execute('SELECT * FROM Users WHERE ID="%s"' % user_id)
-        if cursor == None:
+        cursor.execute('SELECT * FROM Users WHERE ID="%s"' % user_id)
+        cursor = cursor.fetchall()
+        if cursor == []:
             cursor = create_user(user_id)
         for ID , name , amtiaz , uadmin , tdavat , tcoin in cursor:
             self.ID = ID
@@ -26,4 +25,3 @@ class user:
 
 
 Erfan = user(values.me_token())
-print (Erfan)
