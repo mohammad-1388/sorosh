@@ -2,11 +2,7 @@ from mysql.connector import connect
 from os import chdir
 from client import Client
 import values
-SQL = connect(
-    user='me',
-    password='nohack',
-    database='mybot'
-)
+SQL = values.sql_connect()
 
 class defs:
     def __init__ (self , bot_token):

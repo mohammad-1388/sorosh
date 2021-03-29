@@ -3,11 +3,7 @@ from defs import defs
 import values
 from library import create_user
 
-SQL = mysql.connector.connect(
-    user='me',
-    password='nohack',
-    database='mybot'
-)
+SQL = values.sql_connect()
 cursor = SQL.cursor()
 
 class user:
@@ -24,9 +20,9 @@ class user:
             self.tdavat = tdavat
             self.tcoin = tcoin
 
-    def updater (self , block , new , last):
+    def updater (self , block , new , last_or_user_id):
         cursor = SQL.cursor()
-        cursor.execute('UPDATE Users SET %s=%s WHERE %s=%s' % block , new , block , last)
+        cursor.execute('UPDATE Users SET %s=%s WHERE %s=%s' % block , new , block , last_or_user_id)
 
 
 Erfan = user(values.me_token())

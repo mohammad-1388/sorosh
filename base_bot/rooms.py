@@ -67,4 +67,4 @@ def delete_room (loc):
         for line in lines:
             if line.rstrip() != loc:
                 server_list.write(line)
-            
+

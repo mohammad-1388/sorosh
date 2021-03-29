@@ -2,11 +2,7 @@ import mysql.connector
 from defs import defs
 import values
 
-SQL = mysql.connector.connect(
-    user='me',
-    password='nohack',
-    database='mybot'
-)
+SQL = values.sql_connect()
 bot = defs(values.bot_token())
 cursor = SQL.cursor()
 
