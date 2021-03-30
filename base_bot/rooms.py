@@ -61,5 +61,3 @@ def delete_room (Name):
         for line in lines:
             if line.strip() != Name:
                 server_list.write(line)
-
-print (find_room('hello'))

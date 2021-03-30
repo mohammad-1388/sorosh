@@ -11,14 +11,19 @@ class user:
         cursor = cursor.fetchall()
         if cursor == []:
             cursor = create_user(user_id)
-        for ID , name , amtiaz , uadmin , tdavat , tcoin in cursor:
-            self.ID = ID
-            self.name = name
-            self.amtiaz = amtiaz
-            self.uadmin = uadmin
-            self.tdavat = tdavat
-            self.tcoin = tcoin
+        else:
+            cursor = cursor[0]
 
-    def updater (self , block , new , last_or_user_id):
+        self.ID = cursor[0]
+        self.name = cursor[1]
+        self.amtiaz = cursor[2]
+        self.uadmin = cursor[3]
+        self.tdavat = cursor[4]
+        self.tcoin = cursor[5]
+
+    def updater (self , block , new):
+        SQL = values.sql_connect()
         cursor = SQL.cursor()
-        cursor.execute('UPDATE Users SET %s=%s WHERE %s=%s' % block , new , block , last_or_user_id)
+        cursor.execute('UPDATE Users SET %s=%s WHERE ID=%s' % (block , '\"'+new+'\"' , '\"'+self.ID+'\"'))
+        SQL.commit()
+        SQL.close()
