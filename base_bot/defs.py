@@ -25,18 +25,15 @@ class defs:
         return sample(list_karakters , sample_n)
 
     def send_group (self , loc , name_karbar , message):
-        try:
-            chdir('base_bot/server_tmp/')
-        except:
-            pass
 
         text = '%s : %s'
-        with open(loc , 'r') as users:
-            group = users.readlines()
-            for har_fard in group:
-                self.send_message(har_fard.strip() , text % (name_karbar , message))
-
-            users.close()
+        SQL = values.sql_connect()
+        cursor = SQL.cursor()
+        cursor.execute('SELECT ID FROM %s' % (loc))
+        group = cursor.fetchall()
+        for har_fard in group:
+            self.send_message(har_fard[0] , text % (name_karbar , message))
+        SQL.close()
 
     def magics_game (self , user_id):
         pass
@@ -45,27 +42,18 @@ class defs:
         pass
 
     def exit_game (self , user_id , loc):
+        SQL = values.sql_connect()
+        cursor = SQL.cursor()
         tmp_keyboard = [[{'text' : 'بله' , 'command' : '//yes_exit'} , {'text' : 'نه' , 'command' : '//no_exit'}]]
         self.send_message(user_id , 'ایا مطمعن به خروج از بازی هستید؟' , tmp_keyboard)
         for message in self.get_message():
             if message['body'][0:2] == '//':
                 if message['body'] == '//yes_exit':
-                    #
-                    try:
-                        chdir('base_bot/server_tmp/')
-                    except:
-                        pass
-                    with open (loc , 'r+') as server_user:
-                        lines = server_user.readlines()
-                        server_user.close()
-                    with open (loc , 'w') as server_user:
-                        for line in lines:
-                            if line.strip() != user_id:
-                                server_user.write(line)
+                    cursor.execute('DELETE FROM %s WHERE ID="%s"' % (loc , user_id))
                     return True
-                    #
+
                 if message['body'] == '//no_exit':
-                    self.send_message(user_id , 'باشه پس به بازی ادامه بده' , values.game_loop_keyboard())
+                    self.send_message(user_id , 'باشه پس به بازی ادامه بده' , values.game_loop_keyboard_init())
                     return False
             else:
                 self.send_group(loc , user_id , message['body'])
@@ -88,4 +76,3 @@ class defs:
                     break
             else:
                 self.send_message(user_id , 'جوون؟ :/')
-

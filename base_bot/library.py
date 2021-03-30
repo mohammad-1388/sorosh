@@ -27,3 +27,7 @@ def random_string ():
     from string import ascii_letters
     from random import choice
     return ''.join(choice(ascii_letters) for i in range(10))
+
+def main_page (karbar):
+    user_id = karbar.ID
+    

@@ -27,6 +27,7 @@ def create_room ():
     rand = random_string()
     cursor = SQL.cursor()
     cursor.execute('CREATE TABLE %s (counter_users int(1) AUTO_INCREMENT KEY , ID varchar(60) , cards int(2) DEFAULT 0, create_card int(1) DEFAULT 0, coins int(2) DEFAULT 2, karakter varchar(10) , karaktertwo varchar(10) DEFAULT "None")' % rand)
+    SQL.commit()
     writer(rand , 'server_list.txt')
     return rand
 
@@ -37,12 +38,12 @@ def find_room (user_id):
     with open('server_list.txt' , 'r') as list_server:
         list_server = list_server.readlines()
     for har_server in list_server:
-        har_server = har_server.rstrip('\n')
+        har_server = har_server.strip('\n')
         cursor.execute('SELECT counter_users FROM %s' % har_server)
         last = cursor.fetchall()
         if last == []:
             continue
-        if last.pop()[0] <= 7:
+        if last.pop()[0] <= 6:
             writer_DB(har_server , 'ID' , user_id)
             return har_server
     if sang:
@@ -53,6 +54,8 @@ def find_room (user_id):
 def delete_room (Name):
     cursor = SQL.cursor()
     cursor.execute('DROP TABLE %s' % Name)
+    SQL.commit()
+    SQL.close()
 
     with open ('server_list.txt' , 'r+') as server_list:
         lines = server_list.readlines()

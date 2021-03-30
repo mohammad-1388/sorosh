@@ -1,4 +1,3 @@
-from os import chdir
 from defs import defs
 from client import Client
 import rooms
@@ -14,6 +13,8 @@ karbar = user(me_token)
 def game_loop (karbar):
     keyboard_game_init = values.game_loop_keyboard_init()
     user_id = karbar.ID
+    SQL = values.sql_connect()
+    cursor = SQL.cursor()
     karakters = [
         'ادمکش' ,
         'راهزن' ,
@@ -37,18 +38,17 @@ def game_loop (karbar):
     x = my_bot.random_karakter(karakters , 7)
     countertmp = 0
 
-    with open (server_loc , 'r') as file:
-        user_id_server = file.readlines()
-        for har_user in user_id_server:
-            har_user = har_user.strip()
-            my_bot.send_message(har_user , 'کاراکتر شما هست: %s' % x[countertmp])
-            dict_user_karakter[karakters[countertmp]] = har_user
-            countertmp += 1
+    cursor.execute('SELECT ID FROM %s' % server_loc)
+    users_id_server = cursor.fetchall()
+    for har_user in users_id_server:
+        my_bot.send_message(har_user[0] , 'کاراکتر شما هست: %s' % x[countertmp])
+        dict_user_karakter[karakters[countertmp]] = har_user
+        countertmp += 1
 
     # خود بازی
-    my_bot.change_keyboard(my_user , keyboard_game_init)
+    my_bot.change_keyboard(user_id , keyboard_game_init)
     for message in my_bot.get_message():
-        my_bot.change_keyboard(my_user , keyboard_game_init)
+        my_bot.change_keyboard(user_id , keyboard_game_init)
         print (message)
         if message['from'] == user_id:
             if message['body'][0:2] == '//':
@@ -56,9 +56,10 @@ def game_loop (karbar):
                 if vorodi == '//exit_game':
                     if my_bot.exit_game(user_id , server_loc):
                         my_bot.send_message(user_id , 'باموقیت از سرور خارج شدید')
-                        tmp_message = 'کاربر %s از بازی خارج شد و شهرش نابود شد' % user_id
+                        tmp_message = 'کاربر %s از بازی خارج شد و شهرش نابود شد' % karbar.name
                         my_bot.send_group(server_loc , 'سیستم' , tmp_message)
-                        main_loop()
+                        main_page(karbar)
+                        break
                 if vorodi == '//magics':
                     my_bot.magics_game(user_id)
                 if vorodi == '//daraiy_ha':
@@ -67,6 +68,7 @@ def game_loop (karbar):
                 # اجرا کردن دستور کیبورد
             else:
                 my_bot.send_group(server_loc , karbar.name , message['body'])
+                my_bot.change_keyboard(user_id , keyboard_game_init)
 
 
 game_loop(karbar)

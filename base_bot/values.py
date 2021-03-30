@@ -7,6 +7,9 @@ def me_token ():
 def game_loop_keyboard_init():
     return [ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'} , {'text' : 'چت خصوصی' , 'command' : '//privet_chat'}] , [{'text' : 'جادو ها'   , 'command' : '//magics'   } , {'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
 
+# def main_page_keyboard_init():
+#     return [ [{'text' : ''}]]
+
 def sql_connect ():
     from mysql.connector import connect
     return connect(user='Erfan' , password='nohack' , database='mybot')
