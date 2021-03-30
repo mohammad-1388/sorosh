@@ -1,19 +1,19 @@
-import mysql.connector
 from os import chdir
 from defs import defs
 from client import Client
 import rooms
 from collections import OrderedDict
 import values
+from user import user
+from library import *
 
-bot_token = values.bot_token()
-my_user = values.me_token()
-my_bot = defs(bot_token)
+me_token = values.me_token()
+my_bot = defs(values.bot_token())
+karbar = user(me_token)
 
-keyboard_game_init = [ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'} , {'text' : 'جادو ها'   , 'command' : '//magics'   } ] , 
-                       [{'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
-
-def game_loop (user_id):
+def game_loop (karbar):
+    keyboard_game_init = values.game_loop_keyboard_init()
+    user_id = karbar.ID
     karakters = [
         'ادمکش' ,
         'راهزن' ,
@@ -24,6 +24,7 @@ def game_loop (user_id):
         'معمار' ,
         'سردار'
     ]
+
     server_loc = rooms.find_room(user_id)
 
     # مرحله حذف شدن کاراکتر اول
@@ -49,14 +50,15 @@ def game_loop (user_id):
     for message in my_bot.get_message():
         my_bot.change_keyboard(my_user , keyboard_game_init)
         print (message)
-        if message['type'] == 'TEXT':
+        if message['from'] == user_id:
             if message['body'][0:2] == '//':
                 vorodi = message['body']
                 if vorodi == '//exit_game':
                     if my_bot.exit_game(user_id , server_loc):
                         my_bot.send_message(user_id , 'باموقیت از سرور خارج شدید')
-                        my_bot.send_group(server_loc , 'سیستم' , 'کاربر %s از بازی خارج شد' % user_id)
-                        break
+                        tmp_message = 'کاربر %s از بازی خارج شد و شهرش نابود شد' % user_id
+                        my_bot.send_group(server_loc , 'سیستم' , tmp_message)
+                        main_loop()
                 if vorodi == '//magics':
                     my_bot.magics_game(user_id)
                 if vorodi == '//daraiy_ha':
@@ -64,10 +66,7 @@ def game_loop (user_id):
                 my_bot.change_keyboard(user_id , keyboard_game_init)
                 # اجرا کردن دستور کیبورد
             else:
-                my_bot.send_group(server_loc , 'test' , message['body'])
+                my_bot.send_group(server_loc , karbar.name , message['body'])
 
 
-
-
-game_loop(my_user)
-
+game_loop(karbar)

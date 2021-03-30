@@ -22,6 +22,3 @@ class user:
     def updater (self , block , new , last_or_user_id):
         cursor = SQL.cursor()
         cursor.execute('UPDATE Users SET %s=%s WHERE %s=%s' % block , new , block , last_or_user_id)
-
-
-Erfan = user(values.me_token())

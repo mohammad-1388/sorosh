@@ -1,12 +1,10 @@
-import mysql.connector
 from defs import defs
 import values
 
-SQL = values.sql_connect()
-bot = defs(values.bot_token())
-cursor = SQL.cursor()
-
 def create_user(user_id):
+    SQL = values.sql_connect()
+    bot = defs(values.bot_token())
+    cursor = SQL.cursor()
     bot.send_message(user_id , 'متاسفانه اسم شما در بازی ثبت نشده است لطفا اسم خود را وارد نمایید')
 
     for message in bot.get_message():
@@ -24,3 +22,8 @@ def create_user(user_id):
             tmp_keyboard = [[{'text' : 'اره همینه' , 'command' : '//yes_create_user_name'} , {'text' : 'نه اشتباهه' , 'command' : '//no_create_bot_name'}]]
 
             bot.send_message(user_id , tmp_message , tmp_keyboard)
+
+def random_string ():
+    from string import ascii_letters
+    from random import choice
+    return ''.join(choice(ascii_letters) for i in range(10))
