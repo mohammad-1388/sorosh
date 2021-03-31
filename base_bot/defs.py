@@ -1,7 +1,7 @@
-from mysql.connector import connect
 from os import chdir
 from client import Client
 import values
+from library import *
 
 class defs:
     def __init__ (self , bot_token):
@@ -38,8 +38,26 @@ class defs:
     def magics_game (self , user_id):
         pass
 
-    def daraiy_ha_game (self , user_id):
-        pass
+    def daraiy_ha_game (self , user_id , server_name , arsal:bool=True):
+        SQL = values.sql_connect()
+        cursor = SQL.cursor()
+        cursor.execute('SELECT cards , create_card , coins , karakter , karaktertwo FROM %s WHERE ID="%s"' % ('WiNgStGMbn' , values.me_token()))
+        x = cursor.fetchall()
+        x = x[0]
+        SQL.close()
+
+        tmp_message = 'کاراکتر دوم شما هست: %s' % (x[4])
+        tmp_lambda = lambda x : tmp_message if x == 'None' else ''
+        tmp_message_2 = '''تعداد کارت ها: %i
+        تعداد ساختمان های ساخته شده: %i
+        تعداد سکه ها: %i
+        کاراکتر شما هست: %s
+        %s''' % (x[0] , x[1] , x[2] , x[3] , tmp_lambda(x[4]))
+
+        if arsal:
+            self.send_message(user_id , tmp_message_2)
+        else:
+            return tmp_message_2
 
     def exit_game (self , user_id , loc):
         SQL = values.sql_connect()
@@ -64,7 +82,6 @@ class defs:
         self.send_message(user_id , tmp_message , tmp_keyboard)
         cursor = SQL.cursor()
         for message in self.get_message():
-            print (message)
             if message['body'][0:2] == '//':
                 if message['body'] == '//yes_reset_rank':
                     cursor.execute('DELETE FROM Users WHERE ID="%s"' % user_id)
@@ -76,3 +93,49 @@ class defs:
                     break
             else:
                 self.send_message(user_id , 'جوون؟ :/')
+
+    def start_game (self , karbar):
+        tmp_message = 'ایا مطمعن به شروع بازی هستید؟'
+        tmp_keyboard = [ [{'text' : 'بله' , 'command' : '//yes_start_game_main_page'} , {'text' : 'نه' , 'command' : '//no_start_game_main_page'}] ]
+        self.send_message(karbar.ID , tmp_message , tmp_keyboard)
+
+        for message in self.get_message():
+            if message['from'] == karbar.ID:
+                body = message['body']
+                if body == '//yes_start_game_main_page':
+                    game_loop(karbar)
+                if body == '//no_start_game_main_page':
+                    self.send_message(karbar.ID , 'باشه')
+                    break
+                else:
+                    self.send_message(karbar.ID , 'جون؟ :/')
+
+    def change_name (self , karbar):
+        user_id = karbar.ID
+        tmp_message = 'لطفا اسم خود را وارد نمایید'
+        tmp_keyboard = [ [{'text' : 'منصرف شدم' , 'command' : '//cancel_change_name_main_page'}] ]
+        self.send_message(user_id , tmp_message , tmp_keyboard)
+
+        for message in bot.get_message():
+            if message['from'] == user_id:
+                body = message['body']
+                if message['body'] == '//cancel_change_name_main_page':
+                    self.send_message(user_id , 'باشه')
+                    break
+                if body == '//yes_change_name':
+                    karbar.updater('Name' , name_karbar)
+
+                name_karbar = message['body']
+                tmp_message = 'اسم شما %s هست دیگه نه؟' % name_karbar
+                tmp_keyboard = [[{'text' : 'اره همینه' , 'command' : '//yes_change_name'} , {'text' : 'نه اشتباهه' , 'command' : '//no_change_name'}]]
+
+                self.send_message(user_id , tmp_message , tmp_keyboard)
+
+    def amtiaz_hai_karbar (self , karbar):
+        pass
+
+    def show_best_gamer (self , karbar):
+        pass
+
+    def help_about_game (self , karbar):
+        self.send_message(karbar.ID , values.messge_help_about_game())
