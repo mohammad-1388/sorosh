@@ -1,5 +1,5 @@
 from values import sql_connect
-from library import random_string
+import library
 from os import chdir
 
 chdir('base_bot/')
@@ -24,7 +24,7 @@ def writer_DB (table:str , w_values:tuple , values:tuple , DB=sql_connect()):
     DB.close()
 
 def create_room ():
-    rand = random_string()
+    rand = library.random_string()
     cursor = SQL.cursor()
     cursor.execute('CREATE TABLE %s (counter_users int(1) AUTO_INCREMENT KEY , ID varchar(60) , cards int(2) DEFAULT 0, create_card int(1) DEFAULT 0, coins int(2) DEFAULT 2, karakter varchar(10) , karaktertwo varchar(10) DEFAULT "None")' % rand)
     SQL.commit()

@@ -1,12 +1,9 @@
 from defs import defs
-from client import Client
-import rooms
-from collections import OrderedDict
-import values
+from values import bot_token
 from user import user
-from library import *
+from library import main_page
 
-bot = defs(values.bot_token())
+bot = defs(bot_token())
 
 for message in bot.get_message():
     main_page(user(message['from']))
