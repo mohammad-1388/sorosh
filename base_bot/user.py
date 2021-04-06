@@ -21,10 +21,13 @@ class user:
         self.tdavat = data[4]
         self.tcoin = data[5]
 
-    def updater (self , block , new):
+    def updater (self , column:str , new):
         SQL = values.sql_connect()
         cursor = SQL.cursor()
-        cursor.execute('UPDATE Users SET %s=%s WHERE ID=%s' % (block , '\"'+new+'\"' , '\"'+self.ID+'\"'))
+        if type(new) == type(10):
+            cursor.execute('UPDATE Users SET %s=%s WHERE ID="%s"' % (column , new , self.ID))
+        else:
+            cursor.execute('UPDATE Users SET %s="%s" WHERE ID="%s"' % (column , new , self.ID))
         SQL.commit()
 
     def update_values (self):

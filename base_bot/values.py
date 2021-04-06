@@ -6,9 +6,9 @@ def bot_token ():
 def me_token ():
     return 'lbPaUy7i3eV9N9MQc15gEul_34Nas6ye0wRqIYPT3-U1fRCiFtEwvqK9ouA'
 
-def sql_connect ():
+def sql_connect (user='Erfan' , password='nohack' , database='mybot'):
     from mysql.connector import connect
-    return connect(user='Erfan' , password='nohack' , database='mybot')
+    return connect(user=user , password=password , database=database)
 
 # keyboard
 

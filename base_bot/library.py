@@ -159,3 +159,17 @@ def game_loop (karbar):
                 my_bot.change_keyboard(user_id , keyboard_game_init)
             else:
                 my_bot.send_group(server_loc , karbar.name , message['body'] , keyboard_game_init)
+
+def writer (text , loc , back_salsh=True , mode='a'):
+    with open(loc , mode) as File:
+        File.write(text)
+        if back_salsh:
+            File.write('\n')
+        File.close()
+
+def writer_DB (self , table:str , w_values:tuple , values_r:tuple , DB=values.sql_connect()):
+    cursor = DB.cursor()
+    if type(values_r) == type('a'):
+        values_r = tuple([values_r])
+    if type(w_values) == type('a'):
+        w_values = tuple([w_values])
