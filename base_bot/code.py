@@ -1,13 +1,12 @@
-from collections import OrderedDict
 from os import chdir
+chdir('base_bot/')
+from collections import OrderedDict
 from defs import defs
-from values import bot_token , message_help_about_game_how_to_play
+import values
 from user import user
-from library import main_page
 from rooms import room
 
-chdir('base_bot/')
-bot = defs(bot_token())
+bot = defs(values.bot_token())
 
 def main_page (karbar:user):
 
@@ -48,14 +47,13 @@ def game_loop (karbar:user):
     # values
     karakters = values.karakters_game_loop()
     dict_user_karakter = OrderedDict()
-    me_token = values.me_token()
     my_bot = defs(values.bot_token())
     keyboard_game_init = values.game_loop_keyboard_init()
     user_id = karbar.ID
 
     SQL = values.sql_connect()
     cursor = SQL.cursor()
-    server = find_room(user_id)
+    server = room(karbar)
     server_loc = server.server_loc
 
     # مرحله حذف شدن کاراکتر اول
@@ -92,7 +90,7 @@ def game_loop (karbar:user):
                     if vorodi == '//magics':
                         my_bot.magics_game(user_id)
                     if vorodi == '//daraiy_ha':
-                        my_bot.daraiy_ha_game(user_id , server_loc)
+                        my_bot.daraiy_ha_game(user_id , server)
                     my_bot.change_keyboard(user_id , keyboard_game_init)
                 else:
                     my_bot.send_group(server_loc , karbar.name , message['body'] , keyboard_game_init)

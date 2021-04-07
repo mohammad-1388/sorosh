@@ -68,7 +68,7 @@ def writer (text , loc , back_salsh=True , mode='a'):
             File.write('\n')
         File.close()
 
-def writer_DB (table , w_values , values_r , DB=values.sql_connect()):
+def writer_DB (table:str , w_values , values_r , DB=values.sql_connect()):
     cursor = DB.cursor()
     if type(values_r) == type('a'):
         values_r = tuple([values_r])

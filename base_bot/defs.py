@@ -1,7 +1,7 @@
 from client import Client
 import values
 from library import *
-
+import code
 SQL = values.sql_connect()
 cursor = SQL.cursor()
 
@@ -32,7 +32,6 @@ class defs:
         group = cursor.fetchall()
         for har_fard in group:
             self.send_message(har_fard[0] , text % (name_karbar , message) , keyboard)
-        SQL.close()
 
     def magics_game (self , user_id):
         pass
@@ -40,19 +39,19 @@ class defs:
     def daraiy_ha_game (self , user_id , server , arsal:bool=True):
         data = server
 
-        tmp_message = '''
-        کارت های شما: %s
-        تعداد کارت ها: %i
-        کارت های ساخته شده شما: %s
-        تعداد ساختمان های ساخته شده: %i
-        تعداد سکه ها: %i
-        کاراکتر شما هست: %s
-        ''' % (data.cards , len(data.cards) , data.create_cards , len(data.create_cards) , data.coins , data.karakterone + ',' +data.karaktertwo)
+        tmp_lambda = lambda a : len(a) if a != None else 0
+        tmp_lambda_2 = lambda a : a if a != None else 'هیچی'
+
+        if data.karakter_one == None or data.karakter_two == None:
+            tmp_message = 'کارت های شما: %s\nتعداد کارت ها: %i\nکارت های ساخته شده شما: %s\nتعداد ساختمان های ساخته شده: %i\nتعداد سکه ها: %i\n' % (tmp_lambda_2(data.cards) , tmp_lambda(data.cards) , tmp_lambda_2(data.create_cards) , tmp_lambda(data.create_cards) , data.coins)
+
+        else:
+            tmp_message = 'کارت های شما: %s\nتعداد کارت ها: %i\nکارت های ساخته شده شما: %s\nتعداد ساختمان های ساخته شده: %i\nتعداد سکه ها: %i\nکاراکتر شما هست: %s' % (data.cards , tmp_lambda(data.cards) , data.create_cards , tmp_lambda(data.create_cards) , data.coins , data.karakter_one + ',' +data.karakter_two)
 
         if arsal:
             self.send_message(user_id , tmp_message)
         else:
-            return tmp_message
+            return [data.cards , tmp_lambda(data.cards) , data.create_cards , tmp_lambda(data.create_cards) , data.coins]
 
     def exit_game (self , user_id , loc):
         tmp_keyboard = [[{'text' : 'بله' , 'command' : '//yes_exit'} , {'text' : 'نه' , 'command' : '//no_exit'}]]
@@ -95,7 +94,7 @@ class defs:
             if message['from'] == karbar.ID:
                 body = message['body']
                 if body == '//yes_start_game_main_page':
-                    game_loop(karbar)
+                    code.game_loop(karbar)
                 if body == '//no_start_game_main_page':
                     self.send_message(karbar.ID , 'باشه')
                     break
@@ -121,7 +120,7 @@ class defs:
                 if not body[0:2] == '//':
                     name_karbar = body
                 if body == '//no_change_name': # wrong onderstand
-                    self.send_message(user_id , 'ببخشید لطفا دوباره بگید' , tmp_keyboard)
+                    self.send_message(user_id , 'ببخشید لطفا دوباره بگید')
                     name_karbar = None
                 if name_karbar != None:
                     tmp_message = 'اسم شما %s هست دیگه نه؟' % name_karbar

@@ -23,6 +23,7 @@ class room:
                 library.writer_DB(har_server , 'ID' , user_id)
                 self.server_loc = har_server
                 sang = False
+
         if sang:
             tmp = self.create_room()
             library.writer_DB(tmp , 'ID' , user_id)
@@ -31,17 +32,19 @@ class room:
 
         self.user_id = user_id
         cursor = SQL.cursor()
+        cursor.execute('INSERT INTO %s (ID) VALUES ("%s")' % (self.server_loc , user_id))
+        SQL.commit()
         cursor.execute('SELECT * FROM %s WHERE ID="%s"' % (self.server_loc , user_id))
         data = cursor.fetchall()[0]
 
         self.number = data[0]
-        self.cards = data[2].split(',')
-        self.create_cards = data[3].split(',')
+        self.cards = data[2]
+        self.create_cards = data[3]
         self.coins = data[4]
         self.karakter_one = data[5]
         self.karakter_two = data[6]
 
-    def create_room (self): # counter , ID , cards , create_cards , coins , karakters , karaktertwo
+    def create_room (self): # counter , (ID) , (cards) , create_cards , coins , karakters , karaktertwo
         rand = library.random_string()
         cursor = SQL.cursor()
         cursor.execute('CREATE TABLE %s (counter_users int(1) AUTO_INCREMENT KEY , ID varchar(60) , cards varchar(200) , create_cards varchar(200), coins int(2) DEFAULT 2 , karakter varchar(10) , karaktertwo varchar(10) )' % rand)
@@ -54,7 +57,6 @@ class room:
         cursor = SQL.cursor()
         cursor.execute('DROP TABLE %s' % Name)
         SQL.commit()
-        SQL.close()
 
         with open ('server_list.txt' , 'r+') as server_list:
             lines = server_list.readlines()

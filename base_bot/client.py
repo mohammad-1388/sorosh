@@ -55,9 +55,6 @@ class Client:
                 else:
                     print('Invalid bot token OR Invalid connection response from server')
 
-                print('retry to connect after 10 seconds...')
-                sleep(self.RETRY_DELAY)
-
             except Exception as e:
                 print(e.args[0])
                 print('retry to connect after 10 seconds...')
