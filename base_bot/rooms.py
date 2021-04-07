@@ -33,7 +33,7 @@ class room:
         cursor = SQL.cursor()
         cursor.execute('SELECT * FROM %s WHERE ID="%s"' % (self.server_loc , user_id))
         data = cursor.fetchall()[0]
-        
+
         self.number = data[0]
         self.cards = data[2].split(',')
         self.create_cards = data[3].split(',')
@@ -69,4 +69,20 @@ class room:
 
         if column == 'cards' or column == 'create_cards':
             value = ','.join(value)
-        cursor.execute('UPDATE')
+        if type(value) == type(10):
+            cursor.execute('UPDATE Users SET %s=%s WHERE ID="%s"' % (column , value , self.user_id))
+        else:
+            cursor.execute('UPDATE Users SET %s="%s" WHERE ID="%s"' % (column , value , self.user_id))
+        self.update_values()
+
+    def update_values (self):
+        cursor = SQL.cursor()
+        cursor.execute('SELECT * FROM %s WHERE ID="%s"' % (self.server_loc , self.user_id))
+        data = cursor.fetchall()[0]
+
+        self.number = data[0]
+        self.cards = data[2].split(',')
+        self.create_cards = data[3].split(',')
+        self.coins = data[4]
+        self.karakter_one = data[5]
+        self.karakter_two = data[6]

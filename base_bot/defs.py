@@ -15,7 +15,7 @@ class defs:
         messages = self.client.get_messages()
         for message in messages:
             yield message
-    
+
     def send_message (self , to , message , keyboard=None):
         self.client.send_text(to, message , self.client.make_keyboard(keyboard))
 
@@ -37,24 +37,22 @@ class defs:
     def magics_game (self , user_id):
         pass
 
-    def daraiy_ha_game (self , user_id , server_name , arsal:bool=True):
-        cursor.execute('SELECT cards , create_card , coins , karakter , karaktertwo FROM %s WHERE ID="%s"' % ('WiNgStGMbn' , values.me_token()))
-        x = cursor.fetchall()
-        x = x[0]
-        SQL.close()
+    def daraiy_ha_game (self , user_id , server , arsal:bool=True):
+        data = server
 
-        tmp_message = 'کاراکتر دوم شما هست: %s' % (x[4])
-        tmp_lambda = lambda x : tmp_message if x == 'None' else ''
-        tmp_message_2 = '''تعداد کارت ها: %i
+        tmp_message = '''
+        کارت های شما: %s
+        تعداد کارت ها: %i
+        کارت های ساخته شده شما: %s
         تعداد ساختمان های ساخته شده: %i
         تعداد سکه ها: %i
         کاراکتر شما هست: %s
-        %s''' % (x[0] , x[1] , x[2] , x[3] , tmp_lambda(x[4]))
+        ''' % (data.cards , len(data.cards) , data.create_cards , len(data.create_cards) , data.coins , data.karakterone + ',' +data.karaktertwo)
 
         if arsal:
-            self.send_message(user_id , tmp_message_2)
+            self.send_message(user_id , tmp_message)
         else:
-            return tmp_message_2
+            return tmp_message
 
     def exit_game (self , user_id , loc):
         tmp_keyboard = [[{'text' : 'بله' , 'command' : '//yes_exit'} , {'text' : 'نه' , 'command' : '//no_exit'}]]
@@ -164,5 +162,5 @@ class defs:
 
         self.send_message(karbar.ID , '\n'.join(list_name) , keyboard)
 
-    def help_about_game (self , karbar , keyboard=None): # not compelet
+    def help_about_game (self , karbar , keyboard=None):
         pass

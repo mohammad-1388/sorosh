@@ -10,24 +10,33 @@ def sql_connect (user='Erfan' , password='nohack' , database='mybot'):
     from mysql.connector import connect
     return connect(user=user , password=password , database=database)
 
+def karakters_game_loop ():
+    return [
+        'ادمکش' ,
+        'راهزن' ,
+        'تردست' ,
+        'شاه'   ,
+        'حکیم'  ,
+        'تاجر'  ,
+        'معمار' ,
+        'سردار' ]
+
 # keyboard
 
 def game_loop_keyboard_init():
-    return [ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'}] , [{'text' : 'جادو ها'   , 'command' : '//magics'   } , {'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
+    return[ [{'text' : 'دارایی ها' , 'command' : '//daraiy_ha'}] ,
+            [{'text' : 'جادو ها'   , 'command' : '//magics'   } , {'text' : 'خروج از بازی' , 'command' : '//exit_game'}] ]
 
 def main_page_keyboard_init():
     return[ [{'text' : 'شروع بازی'       , 'command' : '//start_game_main_page'} , {'text' : 'تغییر نام'              , 'command' : '//change_name_main_page'}] ,
             [{'text' : 'امتیاز های من'   , 'command' : '//amtiaz_ha_main_page' } , {'text' : 'پاک کردن تمام امتیازات' , 'command' : '//delete_data_main_page'}] ,
             [{'text' : 'بهترین های بازی' , 'command' : '//best_gamer_main_page'} , {'text' : 'روش بازی'               , 'command' : '//help_about_game'      }] ]
 
-# messages
+def help_about_game_keyboard_init():
+    return[ [{'text' : 'قوانین و مقررات' , 'command' : '//ghanon_help_about_game'} , {'text' : 'کاراکتر های بازی' , 'command' : '//karakters_help_about_game'}] ,
+            [{'text' : 'نحوه شمارش امتیاز ها' , 'command' : '//how_to_amtiaz_help_about_game'} , {'text' : 'نحوه بازی' , 'command' : '//how_to_play_help_about_game'}] ]
 
-def messge_help_about_game_mohtava ():
-    return '''محتوات بازی دژ:
-    ۸ عدد کارت نقش
-    ۶۱ عدد کارت سازه
-    سکه ها (نامحدود)
-    تاج پادشاه'''
+# messages
 
 def message_help_about_game_karakters ():
     return '''۱. آدمکش:
@@ -86,3 +95,27 @@ def message_help_about_game_rules_game ():
     تمام افراد پشتیبان در اخر اسم خود کلمه (پشتیبان) را دارند و در صورت بروز مشکل با ایدی @poshtibani_dej_bot تنها ایدی مورد تایید بازی است.
 
     از توجه شما سپاس گزاریم'''
+
+def message_help_about_game_how_to_play ():
+    return '''محتوات بازی دژ:
+    ۸ عدد کارت نقش
+    ۶۱ عدد کارت سازه (تعدادی از کارت ها تکراری هستند)
+    سکه ها (نامحدود)
+    تاج پادشاهی
+
+    مرحله اول (پخش کارت ها و سکه ها و نقش ها):
+    این قسمت به صورت خودکار توسط ربات انجام می گیرد
+
+    مرحله دوم(نوبت):
+    زمانی که نوبت شما باشد می توانید از این قابلیت ها استفاده کنید:
+    انتخاب کارت یا سکه شما (اجباری):
+    شما می توانید بین ۲ عدد سکه و یا یک عدد کارت سازه یکی را انتخاب کنید.
+    ساخت و ساز شهر (اختیاری):
+    می توانید یکی از کارت های درون دسته خودتان را بسازید و به طور خودکار سکه های مورد نیاز (که در توضیحات کارت نوشته شده است) از سکه های شما کم خواهد شد.
+    استفاده از قابلیت نقش(اختیاری):
+    شما می توانید از قدرت نقش استفاده کنید.
+
+    نکات مهم:
+    در هنگام ساخت سازه فقط می توانید یک کارت بسازید (پس مواظب انتخاب خود باشید :))
+    امکان ساختن سازه تکراری در شهر نیست.
+    استفاده از قابلیت نقش فقط یک بار است.'''

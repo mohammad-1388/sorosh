@@ -29,6 +29,7 @@ class user:
         else:
             cursor.execute('UPDATE Users SET %s="%s" WHERE ID="%s"' % (column , new , self.ID))
         SQL.commit()
+        self.update_values()
 
     def update_values (self):
         SQL = values.sql_connect()
